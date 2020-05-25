@@ -1,5 +1,5 @@
 import random
-from sheap_simplified import SoftHeap, null
+from sheap_simplified import SoftHeap#, null
 
 def randlist(n):
 	return [ random.random() for i in range(n) ]
@@ -15,7 +15,7 @@ def build(lst, eps):
 
 def extract(P):
 	lst = [];
-	while P.heap != null:
+	while P.heap != SoftHeap.null:
 		lst.append(P.find_min()[0].key)
 		P.delete_min()
 	return lst
