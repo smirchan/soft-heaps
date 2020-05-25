@@ -1,65 +1,107 @@
-""" Python implementation of "Soft Heaps Simplified"
- 	by Haim Kaplan, Robert E. Tarjan and Uri Zwick.
- 	Adapted from code (c) Haim Kaplan, Robert E. Tarjan and Uri Zwick.
+""" Python implementation of "Soft Heaps Simplified" by Kaplan, Tarjan and Zwick.
+ 	Heavily adapted from code (c) Haim Kaplan, Robert E. Tarjan and Uri Zwick.
 """
 
+import math
 INF = float('inf')
-T = INF
-# T = 2
+T = None
 
 class Item:
-
-	def __init__(e,it):
+	def __init__(e, it):
 		e.key = it
 		e.next = e
-		
+
 class Node:
-	pass
+	
+	def __init__(self, set=None, key=None, rank=None,
+				 left=None, right=None, next=None):
+		self.set = set
+		self.key = key
+		self.rank = rank
+		self.left = left
+		self.right = right
+		self.next = next
+
+	"""Self-explanatory helper functions"""
+
+	def is_leaf(self):
+		return self.left == null
+
+	def key(self):
+		return self.key
+
+	def first(self):
+		return self.set.next
+
+	def set_first(self, it):
+		self.set.next = it
+
+	def has_more_than_one_element(self):
+		return self.first() != self.first().next
+
+	def wire_out_first(self):
+		self.set_first(self.first().next)
+
+	def has_items(self):
+		return self.set != null
+
+	def swap_children(self):
+		self.left, self.right = self.right, self.left
+
+	def move_right_child_left(self):
+		self.left = self.right
+		self.right = null
+
+	def absorb_left_key(self):
+		self.key = self.left.key
+
+	def absorb_left_items(self):
+		self.set = self.left.set
+		self.left.set = null
+
+	def append_left_items(self):
+		self.set.next, self.left.set.next = self.left.set.next, self.set.next
+		self.left.set = null
 
 # Global null node
-null = Node()
+null = Node(key=INF, rank=INF)
 null.set = null
-null.key = INF
-null.rank = INF
 null.left = null
 null.right = null
 null.next = null
 
+def double_even_condition(x):
+	return x.rank > T and x.rank % 2 == 0
 
 def defill(x):
 	# Merge x's smaller child into it; and keep doing that until
 	# you've merged in a leaf
 	fill(x)
 	# If x.rank is even and greater than T, do it again
-	if x.rank > T and x.rank % 2 == 0 and x.left != null:
+	if double_even_condition(x) and not x.is_leaf():
 		fill(x)
 
 def fill(x):
 	# Ensure x.left has the smaller key of x's two children
 	if x.left.key > x.right.key:
-		x.left, x.right = x.right, x.left
+		x.swap_children()
 	# Merge x.left into x (x may or may not already have items)
-	x.key = x.left.key
-	if x.set == null:
-		x.set = x.left.set
+	x.absorb_left_key()
+	if not x.has_items():
+		x.absorb_left_items()
 	else:
-		x.set.next, x.left.set.next = x.left.set.next, x.set.next
-	x.left.set = null
+		x.append_left_items()
 	# If x.left is now a leaf, destroy it and move x.right in its place
-	if x.left.left == null: 
-		x.left = x.right
-		x.right = null
+	if x.left.is_leaf(): 
+		x.move_right_child_left()
 	# Otherwise, call defill on it
 	else:
 		defill(x.left)
 		
-def make_heap():
-	return null
-
 def find_min(H):
 	# Assume findable order; H is the root with minimum key,
 	# H.set.next is its first item
-	return (H.set.next, H.key)
+	return (H.first(), H.key)
 
 def rank_swap(H):
 	# Swap H and H.next if H.next has a smaller rank
@@ -84,11 +126,10 @@ def key_swap(H):
 def delete_min(H):
 	# Assume findable order; H is the root with minimum key
 	# and H.set.next is its first item
-	e = H.set.next
 	# If there's another item, wire out the first element and
 	# return it
-	if e.next != e: 
-		H.set.next = e.next
+	if H.has_more_than_one_element(): 
+		H.wire_out_first()
 		return H
 	# If there's only one item
 	else:
@@ -136,7 +177,7 @@ def make_root(e):
 	return x
 
 def meldable_insert(x, H):
-	# Assuming x is and H are in meldable order
+	# Assuming x and H are in meldable order
 	# If x should come before H in meldable order
 	if x.rank < H.rank:
 		# Make H into findable order, and add x to the beginning
@@ -151,15 +192,13 @@ def meldable_insert(x, H):
 
 def link(x, y):
 	# Make a new node with 1 bigger rank than x and y
-	z = Node()
-	z.set = null
-	z.rank = x.rank + 1
+	z = Node(set=null,
+			 rank=x.rank + 1,
+			 left=x,
+			 right=y)
 	# Set the new node's children to x and y, and merge up small children
-	z.left = x
-	z.right = y
 	defill(z)
 	return z
-
 
 def meld(H1, H2):
 	# Make H1 and H2 meldable, call meldable_meld
@@ -178,47 +217,42 @@ def meldable_meld(H1, H2):
 		# element
 		return meldable_insert(H1, meldable_meld(rank_swap(H1.next), H2))
 
+class SoftHeap:
+	"""Wrapper class for the soft heap.
 
-import random
-
-def randlist(n):
-	return [ random.random() for i in range(n) ]
-
-def randperm(n):
-	return random.sample(list(range(n)),n)
-
-def build(lst):
-	P = make_heap()
-	for it in lst:
-		P=insert(Item(it),P)
-	return P
-
-def extract(P):
-	lst = [];
-	while P!=null:
-		lst.append(find_min(P)[0].key)
-		P = delete_min(P)
-	return lst
+		To use:
 		
-def sort(lst):
-	print(lst)
-	P = build(lst)
-	lst1 = extract(P)
-	if T==INF:
-		for i in range(1,len(lst)):
-			if lst1[i]<lst1[i-1]:
-				print("BUG!!!")
-				raise BUG()
-	print(lst1)
-	print(" ")
-	return lst1
+		sheap = SoftHeap(eps)		==> Make a new Soft Heap (0 <= eps < 1)
 
-sort(randperm(100))
+		sheap.insert(7)				==> 7 is inserted
 
-T=3
-sort(randperm(100))
+		ptr, key = sheap.find_min() ==> Get a pointer to the root of minimum key
+										and its key
 
-T=INF
-P=build(randperm(100))
-Q=build(randperm(200))
-print(extract(meld(P,Q)))
+		sheap.delete_min()			==> Deletes an item from the minimum key
+
+		sheap2 = SoftHeap(eps)
+		sheap.meld(sheap2)			==> melds sheap2 into sheap1
+	"""
+
+	def __init__(self, eps):
+		global T
+		self.eps = eps
+		if self.eps == 0:
+			T = INF
+		else:
+			T = math.ceil(math.log2(3 / eps))
+		self.heap = null
+
+	def insert(self, it):
+		self.heap = insert(Item(it), self.heap)
+
+	def find_min(self):
+		return find_min(self.heap)
+
+	def delete_min(self):
+		self.heap = delete_min(self.heap)
+
+	def meld(self, sh):
+		self.heap = meld(self.heap, sh.heap)
+
