@@ -7,7 +7,7 @@ import math
 INF = float('inf')
 
 """
-	To use:
+To use:
 	
 	sheap = SoftHeap(eps)		==> Make a new Soft Heap (0 <= eps < 1)
 
@@ -240,7 +240,8 @@ class SoftHeapNode(Node):
 			# element
 			return other.meldable_meld(self.next.rank_swap()).meldable_insert(self)
 
-class SoftHeap():
+
+class SoftHeap:
 	"""Wrapper class for the soft heap.
 	"""
 

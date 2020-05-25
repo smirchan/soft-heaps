@@ -1,5 +1,5 @@
 import random
-from sheap_simplified import SoftHeap#, null
+from sheap_simplified import SoftHeap
 
 def randlist(n):
 	return [ random.random() for i in range(n) ]
@@ -33,11 +33,14 @@ def sort(lst, eps):
 	print(" ")
 	return lst1
 
-sort(randperm(30), 0)
-sort(randperm(30), 0.1)
-sort(randperm(30), 0.5)
 
-P=build(randperm(100), 0)
-Q=build(randperm(200), 0)
-P.meld(Q)
-print(extract(P))
+if __name__ == "__main__":
+
+	sort(randperm(30), 0)
+	sort(randperm(30), 0.1)
+	sort(randperm(30), 0.5)
+
+	P=build(randperm(100), 0)
+	Q=build(randperm(200), 0)
+	P.meld(Q)
+	print(extract(P))
