@@ -85,7 +85,9 @@ def select(k, lst, tune_dmcs, tune_eps, viz=None):
 	else:
 		return select(k - len(L) - 1, R, tune_dmcs, tune_eps, viz=viz)
 
-def run_experiment():
+# Run experiment on select k execution time for different values of k on t lists of size 10000
+# Using three tuning methods for choosing delete_min calls/corruption parameter within select k
+def run_exp1():
 	ks = list(range(0, 10001, 1000))
 	ks[0] = 1
 	
@@ -122,15 +124,46 @@ def run_experiment():
 
 	return data
 
-def make_plot(data):
+def make_plot1(data):
 	fig, ax = plt.subplots()
 	for i in range(1, 4):
 		ax.plot(data['x'], data['y' + str(i)])
-	ax.set_xlabel('k')
+	ax.set_xlabel('Rank of Element to Select - k')
 	ax.set_ylabel('Average Execution Time of Select (seconds)')
-	ax.set_title('Average Execution Time of Select (seconds) vs. k')
+	ax.set_title('Average Execution Time of Select (seconds)')
 	lgd = plt.legend(['No tuning', 'Tuning eps', 'Tuning delete_min calls and eps'], title='Tuning Method', loc='center left', bbox_to_anchor=(1, 0.5))
-	plt.savefig('select_exps.png', bbox_extra_artists=(lgd,), bbox_inches='tight', format='png')
+	plt.savefig('exps1.png', bbox_extra_artists=(lgd,), bbox_inches='tight', format='png')
+
+# Run experiment on select median execution time for different list sizes
+# Using three tuning methods for choosing delete_min calls/corruption parameter within select k
+def run_exp2():
+	lst_sizes = list(range(1000, 10001, 1000))
+	
+	data = {'x': lst_sizes, 'y1': [], 'y2': [], 'y3': []}
+	
+	for n in lst_sizes:
+		lst = np.random.permutation(list(range(1, n + 1)))
+		k = n//2
+		#print(n, k)
+
+		t = timeit.timeit(functools.partial(select, k, lst, False, False), number=100)/100
+		data['y1'].append(t)
+		t = timeit.timeit(functools.partial(select, k, lst, False, True), number=100)/100
+		data['y2'].append(t)
+		t = timeit.timeit(functools.partial(select, k, lst, True, True), number=100)/100
+		data['y3'].append(t)
+
+	return data
+
+def make_plot2(data):
+	fig, ax = plt.subplots()
+	for i in range(1, 4):
+		ax.plot(data['x'], data['y' + str(i)])
+	ax.set_xlabel('List size - n')
+	ax.set_ylabel('Average Execution Time of Select Median (seconds)')
+	ax.set_title('Average Execution Time of Select Median (seconds)')
+	lgd = plt.legend(['No tuning', 'Tuning eps', 'Tuning delete_min calls and eps'], title='Tuning Method', loc='center left', bbox_to_anchor=(1, 0.5))
+	plt.savefig('exps2.png', bbox_extra_artists=(lgd,), bbox_inches='tight', format='png')
 
 def main():
 	# Sanity check that select is working correctly
@@ -143,9 +176,12 @@ def main():
 	print('Tuning delete_min calls and eps')
 	print(select(k, lst, True, True))
 
-	# # Runs experiment on linear selection parameter tuning methods
-	# data = run_experiment()
-	# make_plot(data)
+	# # Runs experiment on select k, varying methods for choosing selection parameters affecting the pivot
+	# data = run_exp1()
+	# make_plot1(data)
+
+	# data = run_exp2()
+	# make_plot2(data)
 
 if __name__ == '__main__':
 	main()
