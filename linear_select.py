@@ -16,7 +16,11 @@ def partition(pivot, lst):
 
 	return (L, R)
 
-def select(k, lst, tune_dmcs, tune_eps):
+def select(k, lst, tune_dmcs, tune_eps, viz=None):
+	# viz should be a SoftHeapVisualization object
+	if viz:
+		viz.select_record(k, lst, info="input")
+
 	n = len(lst)
 	if k > n or n < 1:
 		raise Exception('Invalid k value')
@@ -70,14 +74,16 @@ def select(k, lst, tune_dmcs, tune_eps):
 		if elem > max_seen:
 			max_seen = elem
 
-	L, R = partition(max_seen,lst)
+	L, R = partition(max_seen, lst)
+	if viz:
+		viz.select_record(max_seen, L, R, info="partition")
 
 	if len(L) == k - 1:
 		return max_seen
 	elif len(L) >= k:
-		return select(k, L, tune_dmcs, tune_eps)
+		return select(k, L, tune_dmcs, tune_eps, viz=viz)
 	else:
-		return select(k - len(L) - 1, R, tune_dmcs, tune_eps)
+		return select(k - len(L) - 1, R, tune_dmcs, tune_eps, viz=viz)
 
 def run_experiment():
 	ks = list(range(0, 10001, 1000))
