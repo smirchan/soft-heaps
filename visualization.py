@@ -224,7 +224,7 @@ class SelectVisualizer:
 		def port(j, A, side):
 			return f'port="{side}"' if j == len(A) / 2 else ""
 		l_items = "".join([f"<TD {port(j, L, 'left')} BGCOLOR='#ffe9ec'>{str(x)}</TD>" for j, x in enumerate(L)])
-		pivot = f"<TD port='pivot' BGCOLOR='{'yellow' if (final and j+1 == k) else 'lightblue'}'>{str(pivot)}</TD>"
+		pivot = f"<TD port='pivot' BGCOLOR='{'yellow' if (final) else 'lightblue'}'>{str(pivot)}</TD>"
 		r_items = "".join([f"<TD {port(j, R, 'right')} BGCOLOR='#eefdec'>{str(x)}</TD>" for j, x in enumerate(R)])
 		desc =  f"<<TABLE BORDER='0' CELLSPACING='0' CELLBORDER='1'><TR>{l_items + pivot + r_items}</TR></TABLE>>"
 		r.node(str(i), desc, fontname=self.cmd_font, shape="plain")
