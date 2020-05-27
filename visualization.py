@@ -39,8 +39,11 @@ To use the visualization:
 
 class SoftHeapVisualizer:
 
-	def __init__(self, dir="viz_output", view=False):
+	def __init__(self, dir="viz_output", view=False, sheap_mode=True):
+		self.sheap_mode = True
 		self.font = "helvetica bold"
+		if self.sheap_mode:
+			self.font = "noteworthy bold"
 		self.cmd_font = "courier bold"
 		self.cmd_color = 'blue'
 		self.corrupted_color = 'pink'
@@ -87,24 +90,36 @@ class SoftHeapVisualizer:
 		return items
 
 	def desc(self, node):
-		if node == SoftHeap.null:
-			return "<<TABLE BORDER='0' CELLBORDER='1' CELLPADDING='1'><TR><TD>NULL</TD></TR></TABLE>>"
+		items = self.get_item_list(node)
+		corrupted = len(items) > 1 or (len(items) == 1 and items[0] != node.key)
+		color = ""
+		if corrupted:
+			color = self.corrupted_color
 		else:
-			items = self.get_item_list(node)
-			color = ""
-			if len(items) > 1 or (len(items) == 1 and items[0] != node.key):
-				color = self.corrupted_color
+			color = self.uncorrupted_color
+		label = "<"
+		if self.sheap_mode:
+			if node == SoftHeap.null:
+				label += f"<FONT POINT-SIZE='10' COLOR='black'>NULL</FONT>"
+			elif not corrupted:
+				label += f"<FONT POINT-SIZE='12' COLOR='black'>{node.key}</FONT>"
 			else:
-				color = self.uncorrupted_color
-			label = f"<<TABLE BORDER='0' CELLBORDER='1'><TR><TD>{node.key}</TD></TR>\
-					<TR><TD BGCOLOR='{color}'><FONT POINT-SIZE='10'>{str(items)[1:-1]}</FONT></TD></TR></TABLE>>"
-			return label
+				label += f"<TABLE BORDER='0' CELLBORDER='0' CELLPADDING='0' HEIGHT='20' POINT-SIZE='10'><TR><TD>{node.key}</TD></TR>\
+						<TR><TD ><FONT COLOR='red' POINT-SIZE='8'>{str(items)[1:-1]}</FONT></TD></TR></TABLE>"
+		else:
+			if node == SoftHeap.null:
+				label += f"<TABLE BORDER='0' CELLBORDER='1' CELLPADDING='1'><TR><TD>NULL</TD></TR></TABLE>"
+			else:
+				label += f"<TABLE BORDER='0' CELLBORDER='1'><TR><TD>{node.key}</TD></TR>\
+						<TR><TD BGCOLOR='{color}'><FONT POINT-SIZE='10'>{str(items)[1:-1]}</FONT></TD></TR></TABLE>"
+		label += ">"
+		return label
 	
 	def name(self, node):
 		return str(id(node))
 
 	def add_node(self, node, graph):
-		graph.node(self.name(node), self.desc(node), fontname=self.font, shape="plain")
+		graph.node(self.name(node), self.desc(node), fontname=self.font, shape="plain", image="../../sheap.png")
 
 	def add_edge(self, node1, node2, graph, label=None):
 		graph.edge(self.name(node1), self.name(node2), label=label, fontname=self.font)
@@ -183,13 +198,13 @@ class SoftHeapVisualizable(SoftHeap):
 
 
 if __name__ == "__main__":
-	viz = SoftHeapVisualizer(view=False, dir="viz_test")
-	sheap = SoftHeapVisualizable(eps=0.4)
+	viz = SoftHeapVisualizer(view=False, dir="viz_test", sheap_mode=True)
+	sheap = SoftHeapVisualizable(eps=0.9)
 	viz.watch(sheap)
 
-	for i in range(24):
+	for i in range(4):
 		sheap.insert(i)
-	for i in range(12):
+	for i in range(2):
 		sheap.delete_min()
 
 	viz.export_animation(step_duration=500)
