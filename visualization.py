@@ -40,7 +40,8 @@ To use the visualization:
 class SoftHeapVisualizer:
 
 	def __init__(self, dir="sheap_viz_output", view=False, sheap_mode=False):
-		self.sheap_mode = True
+		self.sheap_mode=sheap_mode
+		self.label_edges = False
 		self.font = "helvetica bold"
 		if self.sheap_mode:
 			self.font = "noteworthy bold"
@@ -104,7 +105,8 @@ class SoftHeapVisualizer:
 			elif not corrupted:
 				label += f"<FONT POINT-SIZE='12' COLOR='black'>{node.key}</FONT>"
 			else:
-				label += f"<TABLE BORDER='0' CELLBORDER='0' CELLPADDING='0' HEIGHT='20'><TR><TD><FONT POINT-SIZE='10'>{node.key}</FONT></TD></TR>\
+				label += f"<TABLE BORDER='0' CELLBORDER='0' CELLPADDING='0' HEIGHT='20'><TR><TD>\
+						<FONT POINT-SIZE='10'>{node.key}</FONT></TD></TR>\
 						<TR><TD ><FONT COLOR='red' POINT-SIZE='8'>{str(items)[1:-1]}</FONT></TD></TR></TABLE>"
 		else:
 			if node == SoftHeap.null:
@@ -119,7 +121,10 @@ class SoftHeapVisualizer:
 		return str(id(node))
 
 	def add_node(self, node, graph):
-		graph.node(self.name(node), self.desc(node), fontname=self.font, shape="plain", image="../../sheap.png")
+		if self.sheap_mode:
+			graph.node(self.name(node), self.desc(node), fontname=self.font, shape="plain", image="../../sheap.png")
+		else:
+			graph.node(self.name(node), self.desc(node), fontname=self.font, shape="plain")
 
 	def add_edge(self, node1, node2, graph, label=None):
 		graph.edge(self.name(node1), self.name(node2), label=label, fontname=self.font)
@@ -142,11 +147,17 @@ class SoftHeapVisualizer:
 		def dfs(root):
 			if root.left != SoftHeap.null:
 				self.add_node(root.left, r)
-				self.add_edge(root, root.left, r, " L")
+				if self.label_edges:
+					self.add_edge(root, root.left, r, " L")
+				else:
+					self.add_edge(root, root.left, r)
 				dfs(root.left)
 			if root.right != SoftHeap.null:
 				self.add_node(root.right, r)
-				self.add_edge(root, root.right, r, " R")
+				if self.label_edges:
+					self.add_edge(root, root.right, r, " R")
+				else:
+					self.add_edge(root, root.right, r)
 				dfs(root.right)
 		dfs(heap)
 		return r
@@ -279,13 +290,12 @@ if __name__ == "__main__":
 	
 	# Or, you could do something like:
 	
-	viz = SoftHeapVisualizer(view=False, dir="viz_test")
-	sheap = SoftHeapVisualizable(eps=0.4)
+	viz = SoftHeapVisualizer(view=False, dir="viz_test", sheap_mode=True)
+	sheap = SoftHeapVisualizable(eps=0.9)
 
-	for i in range(128):
+	for i in range(12):
 		sheap.insert(i)
-	for i in range(64):
-		sheap.delete_min()
+	# sheap.delete_min()
 
 	viz.viz(sheap)
 	
