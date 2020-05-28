@@ -156,7 +156,7 @@ def make_plot2(data, title, filename):
 	for i in range(1, 4):
 		ax.plot(data['x'], data['y' + str(i)])
 	ax.set_xlabel('List size - n')
-	ax.set_ylabel(title)
+	ax.set_ylabel('Average Execution Time of Select')
 	ax.set_title(title)
 	lgd = plt.legend(['No tuning', 'Tuning eps', 'Tuning delete_min calls and eps'], title='Tuning Method', loc='center left', bbox_to_anchor=(1, 0.5))
 	plt.savefig(filename, bbox_extra_artists=(lgd,), bbox_inches='tight', format='png')
