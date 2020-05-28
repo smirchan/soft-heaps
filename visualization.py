@@ -39,7 +39,7 @@ To use the visualization:
 
 class SoftHeapVisualizer:
 
-	def __init__(self, dir="sheap_viz_output", view=False, sheap_mode=True):
+	def __init__(self, dir="sheap_viz_output", view=False, sheap_mode=False):
 		self.sheap_mode = True
 		self.font = "helvetica bold"
 		if self.sheap_mode:
@@ -104,7 +104,7 @@ class SoftHeapVisualizer:
 			elif not corrupted:
 				label += f"<FONT POINT-SIZE='12' COLOR='black'>{node.key}</FONT>"
 			else:
-				label += f"<TABLE BORDER='0' CELLBORDER='0' CELLPADDING='0' HEIGHT='20' POINT-SIZE='10'><TR><TD>{node.key}</TD></TR>\
+				label += f"<TABLE BORDER='0' CELLBORDER='0' CELLPADDING='0' HEIGHT='20'><TR><TD><FONT POINT-SIZE='10'>{node.key}</FONT></TD></TR>\
 						<TR><TD ><FONT COLOR='red' POINT-SIZE='8'>{str(items)[1:-1]}</FONT></TD></TR></TABLE>"
 		else:
 			if node == SoftHeap.null:
@@ -265,19 +265,19 @@ class SelectVisualizer:
 
 
 if __name__ == "__main__":
-	viz = SoftHeapVisualizer(view=False, dir="viz_test", sheap_mode=True)
-	sheap = SoftHeapVisualizable(eps=0.9)
-	viz.watch(sheap)
+	# viz = SoftHeapVisualizer(view=False, dir="viz_test", sheap_mode=True)
+	# sheap = SoftHeapVisualizable(eps=0.9)
+	# viz.watch(sheap)
 
-	for i in range(4):
-		sheap.insert(i)
-	for i in range(2):
-		sheap.delete_min()
+	# for i in range(4):
+	# 	sheap.insert(i)
+	# for i in range(2):
+	# 	sheap.delete_min()
 
-	viz.export_animation(step_duration=500)
+	# viz.export_animation(step_duration=500)
 	
-	"""
-	Or, you could do something like:
+	
+	# Or, you could do something like:
 	
 	viz = SoftHeapVisualizer(view=False, dir="viz_test")
 	sheap = SoftHeapVisualizable(eps=0.4)
@@ -288,4 +288,4 @@ if __name__ == "__main__":
 		sheap.delete_min()
 
 	viz.viz(sheap)
-	"""
+	
