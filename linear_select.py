@@ -16,7 +16,15 @@ def partition(pivot, lst):
 
 	return (L, R)
 
+<<<<<<< HEAD
 def select(k, lst, method):
+=======
+def select(k, lst, tune_dmcs, tune_eps, viz=None):
+	# viz should be a SoftHeapVisualization object
+	if viz:
+		viz.select_record(k, lst, info="input")
+
+>>>>>>> master
 	n = len(lst)
 	if k > n or n < 1:
 		raise Exception('Invalid k value')
@@ -69,14 +77,22 @@ def select(k, lst, method):
 		if elem > max_seen:
 			max_seen = elem
 
-	L, R = partition(max_seen,lst)
+	L, R = partition(max_seen, lst)
+	if viz:
+		viz.select_record(max_seen, L, R, info="partition")
 
 	if len(L) == k - 1:
 		return max_seen
 	elif len(L) >= k:
+<<<<<<< HEAD
 		return select(k, L, method)
 	else:
 		return select(k - len(L) - 1, R, method)
+=======
+		return select(k, L, tune_dmcs, tune_eps, viz=viz)
+	else:
+		return select(k - len(L) - 1, R, tune_dmcs, tune_eps, viz=viz)
+>>>>>>> master
 
 # Run experiment on select k execution time for different values of k on t lists of size 10000
 # Using three tuning methods for choosing delete_min calls/corruption parameter within select k
