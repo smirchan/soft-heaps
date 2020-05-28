@@ -2,9 +2,10 @@ from visualization import SelectVisualizer
 from linear_select import select, partition
 import numpy as np
 
-A = np.random.permutation(list(range(1, 100)))
-k=17
+np.random.seed(0)
+lst = np.random.permutation(list(range(1, 101)))
+k = 100
 
 viz = SelectVisualizer(sheap_mode=True)
-select(k, A, False, False, viz=viz)
+select(k, lst, 3, viz=viz)
 viz.viz()
