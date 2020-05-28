@@ -21,12 +21,14 @@ To use the visualization:
 
 === Mode 1: Keep track of edits ===
 
-	viz.watch(sheap)							==> Watch everything you do to the heap
+												==> Optionally do some operations
+
+	viz.watch(sheap)							==> Watch everything done to the heap from now on
 
 	for i in range(5):							==> Perform operations on the heap
 		sheap.insert(i)
 
-	viz.export_animation(step_duration=1000)	==> Export a gif
+	viz.export_animation(step_duration=1000)	==> Export a gif of everything we watched
 
 
 === Mode 2: Just view the final output ====
@@ -276,26 +278,19 @@ class SelectVisualizer:
 
 
 if __name__ == "__main__":
-	# viz = SoftHeapVisualizer(view=False, dir="viz_test", sheap_mode=True)
-	# sheap = SoftHeapVisualizable(eps=0.9)
-	# viz.watch(sheap)
-
-	# for i in range(4):
-	# 	sheap.insert(i)
-	# for i in range(2):
-	# 	sheap.delete_min()
-
-	# viz.export_animation(step_duration=500)
-	
-	
-	# Or, you could do something like:
-	
+		
 	viz = SoftHeapVisualizer(view=False, dir="viz_test", sheap_mode=True)
 	sheap = SoftHeapVisualizable(eps=0.9)
 
-	for i in range(12):
+	for i in range(100):
 		sheap.insert(i)
-	# sheap.delete_min()
+	for i in range(90):
+		sheap.delete_min()
 
-	viz.viz(sheap)
-	
+	viz.watch(sheap)
+
+	sheap.delete_min()
+	sheap.delete_min()
+
+	viz.export_animation(step_duration=500)	
+	# viz.viz(sheap)
