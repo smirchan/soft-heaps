@@ -7,5 +7,5 @@ lst = np.random.permutation(list(range(1, 101)))
 k = 100
 
 viz = SelectVisualizer(sheap_mode=True)
-select(k, lst, 3, viz=viz)
+select(k, lst, 4, viz=viz)
 viz.viz()
