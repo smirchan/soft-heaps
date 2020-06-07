@@ -194,7 +194,7 @@ def make_plot1(data, filename):
 		ax.plot(data['x'], data['y' + str(i)])
 	ax.set_xlabel('Rank of Element to Select - k')
 	ax.set_ylabel('Average Execution Time of Select (seconds)')
-	ax.set_title('Average Execution Time of Select (seconds)')
+	ax.set_title('Average Execution Time of Select')
 	labels = ['No tuning', 'Tuning eps', 'Tuning delete_min calls and eps', 'Tuning delete_min_calls, eps, and soft heap type', 'Intermediate rank optimization with sampling', 'Intermediate rank optimization with random pivot']
 	lgd = plt.legend(labels=labels, title='Tuning Method', loc='center left', bbox_to_anchor=(1, 0.5))
 	plt.savefig(filename, bbox_extra_artists=(lgd,), bbox_inches='tight', format='png')
@@ -235,7 +235,7 @@ def make_plot2(data, title, filename):
 	for i in range(1, 7):
 		ax.plot(data['x'], data['y' + str(i)])
 	ax.set_xlabel('List size - n')
-	ax.set_ylabel('Average Execution Time of Select')
+	ax.set_ylabel('Average Execution Time of Select (seconds)')
 	ax.set_title(title)
 	labels = ['No tuning', 'Tuning eps', 'Tuning delete_min calls and eps', 'Tuning delete_min_calls, eps, and soft heap type', 'Intermediate rank optimization with sampling', 'Intermediate rank optimization with random pivot']
 	lgd = plt.legend(labels=labels, title='Tuning Method', loc='center left', bbox_to_anchor=(1, 0.5))
@@ -288,19 +288,13 @@ def main():
 	# make_plot1(data, 'exp1_new.png')
 
 	# data = run_exp2()
-	# make_plot2(data, 'Average Execution Time of Select for Minimum Element (seconds)', 'exp2_min_new.png')
-
-	# data = run_exp2(p=1/3)
-	# make_plot2(data, 'Average Execution Time of Select for Rank n/3 Element (seconds)', 'exp2_third.png')
+	# make_plot2(data, 'Average Execution Time of Select for Minimum Element', 'exp2_min_new.png')
 
 	# data = run_exp2(p=1/2)
-	# make_plot2(data, 'Average Execution Time of Select for Median Element (seconds)', 'exp2_med_new.png')
-
-	# data = run_exp2(p=2/3)
-	# make_plot2(data, 'Average Execution Time of Select for Rank 2n/3 Element (seconds)', 'exp2_twothirds.png')
+	# make_plot2(data, 'Average Execution Time of Select for Median Element', 'exp2_med_new.png')
 
 	# data = run_exp2(p=1)
-	# make_plot2(data, 'Average Execution Time of Select for Maximum Element (seconds)', 'exp2_max_new.png')
+	# make_plot2(data, 'Average Execution Time of Select for Maximum Element', 'exp2_max_new.png')
 
 if __name__ == '__main__':
 	main()
