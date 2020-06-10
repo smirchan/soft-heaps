@@ -1,0 +1,35 @@
+digraph {
+	subgraph roots {
+		subgraph "4591545616_tree" {
+			4591550544 [label=<<TABLE BORDER='0' CELLBORDER='0' CELLPADDING='0' HEIGHT='20'><TR><TD>						<FONT POINT-SIZE='10'>93</FONT></TD></TR>						<TR><TD ><FONT COLOR='red' POINT-SIZE='8'>93, 92</FONT></TD></TR></TABLE>> fontname="noteworthy bold" image="../../sheap.png" shape=plain]
+			4591545616 -> 4591550544 [fontname="noteworthy bold"]
+			4591550992 [label=<<FONT POINT-SIZE='12' COLOR='black'>94</FONT>> fontname="noteworthy bold" image="../../sheap.png" shape=plain]
+			4591550544 -> 4591550992 [fontname="noteworthy bold"]
+			4591551376 [label=<<FONT POINT-SIZE='12' COLOR='black'>95</FONT>> fontname="noteworthy bold" image="../../sheap.png" shape=plain]
+			4591550992 -> 4591551376 [fontname="noteworthy bold"]
+		}
+		4591545616 -> 4591551760 [label=next fontname="noteworthy bold"]
+		subgraph "4591551760_tree" {
+			4591551440 [label=<<FONT POINT-SIZE='12' COLOR='black'>97</FONT>> fontname="noteworthy bold" image="../../sheap.png" shape=plain]
+			4591551760 -> 4591551440 [fontname="noteworthy bold"]
+			4591551696 [label=<<FONT POINT-SIZE='12' COLOR='black'>98</FONT>> fontname="noteworthy bold" image="../../sheap.png" shape=plain]
+			4591551760 -> 4591551696 [fontname="noteworthy bold"]
+			4591551632 [label=<<FONT POINT-SIZE='12' COLOR='black'>99</FONT>> fontname="noteworthy bold" image="../../sheap.png" shape=plain]
+			4591551696 -> 4591551632 [fontname="noteworthy bold"]
+		}
+		4591551760 -> 4591411024 [label=next fontname="noteworthy bold"]
+		subgraph "4591411024_tree" {
+		}
+		subgraph roots_cluster {
+			graph [rank=same]
+			4591545616 [label=<<TABLE BORDER='0' CELLBORDER='0' CELLPADDING='0' HEIGHT='20'><TR><TD>						<FONT POINT-SIZE='10'>91</FONT></TD></TR>						<TR><TD ><FONT COLOR='red' POINT-SIZE='8'>91, 90</FONT></TD></TR></TABLE>> fontname="noteworthy bold" image="../../sheap.png" shape=plain]
+			4591551760 [label=<<FONT POINT-SIZE='12' COLOR='black'>96</FONT>> fontname="noteworthy bold" image="../../sheap.png" shape=plain]
+			4591411024 [label=<<FONT POINT-SIZE='10' COLOR='black'>NULL</FONT>> fontname="noteworthy bold" image="../../sheap.png" shape=plain]
+		}
+	}
+	label="delete_min()"
+	labelloc=t
+	labeljust=l
+	fontname="courier bold"
+	fontcolor=blue
+}

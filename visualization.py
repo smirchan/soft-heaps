@@ -280,17 +280,14 @@ class SelectVisualizer:
 if __name__ == "__main__":
 		
 	viz = SoftHeapVisualizer(view=False, dir="viz_test", sheap_mode=True)
-	sheap = SoftHeapVisualizable(eps=0.9)
+	sheap = SoftHeapVisualizable(eps=0.5)
 
-	for i in range(100):
+	for i in range(256):
 		sheap.insert(i)
-	for i in range(90):
+	for i in range(128):
 		sheap.delete_min()
 
 	viz.watch(sheap)
-
-	sheap.delete_min()
-	sheap.delete_min()
 
 	viz.export_animation(step_duration=500)	
 	# viz.viz(sheap)
